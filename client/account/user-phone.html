@@ -1,0 +1,13 @@
+<div class="input-group" name="phones">                
+    <input type="text" ng-model="phone.number" name="{{name}}" required class="form-control" mask="(99) 9?9999-9999" ng-pattern="/^\([1-9]{2}\) [2-9][0-9]{3,4}\-[0-9]{4}$/">
+    <div class="input-group-btn">
+        <select class="btn btn-default selectBtn" name="{{name}}_type" ng-model="phone.type" required>
+            <option>Fixo</option>
+            <option>Claro</option>
+            <option>Nextel</option>
+            <option>Oi</option>
+            <option>Tim</option>
+            <option>Vivo</option>
+        </select>
+    </div>
+</div>

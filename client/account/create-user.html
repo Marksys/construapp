@@ -1,0 +1,235 @@
+<form class="form" name="userForm" ng-submit="createUser(user, userForm.$valid)" novalidate/>
+<div class="col-md-8">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Dados Cadastrais</h3>
+        </div>
+        <div class="panel-body">
+            
+            <fieldset class="form-group col-md-12">
+                <label for="name" >Nome</label>
+                <input maxlength="50" type="text" class="form-control" id="name" name="name" required ng-model="user.name" ng-pattern="/^[A-zÀ-ÿ ]+$/"/>
+                <small ng-show="userForm.name.$error.required && userForm.name.$touched">Nome é obrigatório</small>
+                <small ng-show="userForm.name.$error.pattern && userForm.name.$touched">Utilize apenas letras e espaço</small>
+            </fieldset>
+            
+            <fieldset class="form-group col-md-12">
+                <label for="registeredname" >Razão Social</label>
+                <input maxlength="50" type="text" class="form-control" id="registeredname" name="registeredname" required ng-model="user.registeredname" ng-pattern="/^[A-zÀ-ÿ ]+$/"/>
+                <small ng-show="userForm.registeredname.$error.required && userForm.registeredname.$touched">Razão Social é obrigatório</small>
+                <small ng-show="userForm.registeredname.$error.pattern && userForm.registeredname.$touched">Utilize apenas letras e espaço</small>
+            </fieldset>
+            
+            <fieldset class="form-group col-md-12">
+                <label for="fantasyname" >Nome Fantasia</label>
+                <input maxlength="50" type="text" class="form-control" id="fantasyname" name="fantasyname" required ng-model="user.fantasyname" ng-pattern="/^[A-zÀ-ÿ ]+$/"/>
+                <small ng-show="userForm.fantasyname.$error.required && userForm.fantasyname.$touched">Nome Fantasia é obrigatório</small>
+                <small ng-show="userForm.fantasyname.$error.pattern && userForm.fantasyname.$touched">Utilize apenas letras e espaço</small>
+            </fieldset>
+            
+            <fieldset class="form-group col-md-12">
+                <label class="radio-inline">
+                    <input type="radio" ng-model="user.document.type" value="CPF">CPF
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" ng-model="user.document.type" value="CNPJ">CNPJ
+                </label>
+            </fieldset>
+            
+             <fieldset class="form-group col-md-12">
+                <label for="document">{{user.document.type}}</label>
+                <input type="text" class="form-control" id="document" name="document" required ng-model="user.document.number"/>
+                <small ng-show="!userForm.document.$error.required && userForm.document.$touched && !validDocument()">{{user.document.type}} Inválido</small>
+                <small ng-show="userForm.document.$error.required && userForm.document.$touched">{{user.document.type}} é obrigatório</small>
+            </fieldset>
+            
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Imagem de Perfil</h3>
+        </div>
+        <div class="panel-body">
+            <fieldset class="form-group col-md-12">
+                <img src='{{profilePic}}' class="img-thumbnail center-block" width="200" height="200" />
+            </fieldset>
+            <fieldset class="form-group col-md-12 text-center">
+                <label class="btn btn-primary btn-file">
+                    Mudar Imagem
+                    <input type="file" style="display: none;" id="file" name="fileUpload" file-model="fileUpload">
+                </label> 
+            </fieldset>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Dados Profissionais</h3>
+        </div>
+        <div class="panel-body">
+            <fieldset class="form-group col-md-12">
+                <label for="professions">Ramo de Atividade</label>
+                <div name="professions" class="checkbox" ng-repeat="profession in professions">
+                    <label>
+                        <input type="checkbox" checklist-model="user.professions" checklist-value="profession"> 
+                        {{profession}}
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset class="form-group col-md-12">
+                <label for="targetpublic">Público Alvo:</label>
+                <div name="targetpublic" class="checkbox" ng-repeat="public in targetpublic">
+                    <label>
+                        <input type="checkbox" checklist-model="user.targetpublic" checklist-value="public"> 
+                        {{public}}
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset class="form-group col-md-12">
+                <label for="workingdays">Dias de Atendimento:</label>
+                <div name="workingdays" class="radio" ng-repeat="workingday in workingdays">
+                    <label>
+                        <input type="radio" ng-model="user.workingdays" ng-value="workingday"> 
+                        {{workingday}}
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset class="form-group col-md-12">
+                <label for="workinghours">Horário de Atendimento:</label>
+                <div name="workinghours" class="radio" ng-repeat="workinghour in workinghours">
+                    <label>
+                        <input type="radio" ng-model="user.workinghours" ng-value="workinghour"> 
+                        {{workinghour}}
+                    </label>
+                </div>
+            </fieldset>
+            <fieldset class="form-group col-md-12">
+                <label for="specificaarea">Descreva as áreas específicas de atuação e diferenciais:</label><br/>               
+                <textarea maxlength="400" class="form-control" rows="5" name="specificaarea" ng-model="user.specificarea"></textarea>
+            </fieldset>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Contato</h3>
+        </div>
+        <div class="panel-body">
+        
+            <fieldset class="form-group col-md-12">
+                <label for="phones">Telefones</label> 
+                
+                <user-phone phone="user.phones[0]" name="phone0"></user-phone>            
+                <small ng-show="userForm.phone0.$error.pattern && userForm.phone0.$touched">Telefone inválido</small>
+                <small ng-show="userForm.phone0.$error.required && userForm.phone0.$touched">Insira um telefone</small>
+                <small ng-show="!userForm.phone0.$error.pattern && !userForm.phone0.$error.required && userForm.phone0.$touched && userForm.phone0_type.$error.required">
+                    Tipo de telefone é obrigatório</small>                
+                
+                <div id="dynamicTel">           
+                </div>
+                
+                <div style="margin-top:10px" class="btn-group pull-right" role="toolbar">                    
+                    <button type="button" class="btn btn-info btn-xs"  ng-click="delTel()">
+                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="addTel()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </button>
+                </div>                
+            </fieldset>
+            
+            <div class="form-group col-md-12">
+                <label for="email">Email:</label>
+                <input maxlength="50" class="form-control" type="email" name="email" required ng-model="user.email"/>
+                <small ng-show="userForm.email.$invalid && userForm.email.$touched">E-mail inválido</small>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Endereço</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <fieldset class="form-group col-md-4 col-xs-6">
+                    <label for="cep" >CEP</label>
+                    <input type="text" ng class="form-control" id="cep" name="cep" required ng-model="user.adress.cep" ng-blur="getCep()"/>
+                    <small ng-show="userForm.cep.$error.required && userForm.cep.$touched">CEP é obrigatório</small>
+                </fieldset>
+            </div>      
+            <div class="row">
+                <fieldset class="form-group col-md-12 col-xs-12">
+                    <label for="street" >Rua</label>
+                    <input maxlength="40" type="text" class="form-control" id="street" name="street" required ng-model="user.adress.street"/>
+                    <small ng-show="userForm.street.$error.required && userForm.street.$touched">Rua é obrigatória</small>        
+                </fieldset>
+            </div>  
+            <div class="row">
+                <fieldset class="form-group col-md-4 col-xs-6">
+                    <label for="number" >Número</label>
+                    <input maxlength="6" type="text" class="form-control" id="number" name="number" required ng-model="user.adress.number"/>
+                    <small ng-show="userForm.number.$error.required && userForm.number.$touched">Número é obrigatório</small>             
+                </fieldset>
+                <fieldset class="form-group col-md-4 col-xs-6">
+                    <label for="complement" >Complemento</label>
+                    <input maxlength="20" type="text" class="form-control" id="complement" name="complement" ng-model="user.adress.complement"/>          
+                </fieldset>                
+                <fieldset class="form-group col-md-4 col-xs-12">
+                    <label for="district" >Bairro</label>
+                    <input maxlength="20" type="text" class="form-control" id="district" name="district" required ng-model="user.adress.district"/>
+                    <small ng-show="userForm.district.$error.required && userForm.district.$touched">Bairro é obrigatório</small>          
+                </fieldset>  
+            </div>
+            <div class="row">               
+                <fieldset class="form-group col-md-12 col-xs-12">
+                    <label for="city" >Cidade/Estado</label>
+                    <div class="input-group">
+                        <input maxlength="50" type="text" class="form-control" id="city" name="city" ng-model="user.adress.city" required/>
+                        <div class="input-group-btn">
+                            <select ng-options="o for o in states" class="btn btn-default selectBtn" ng-model="user.adress.state" id="state" name="state" required>
+                            </select>
+                        </div>
+                    </div>
+                    <small ng-show="userForm.city.$error.required && userForm.city.$touched">Cidade é obrigatória</small>
+                    <small ng-show="!userForm.city.$error.required && userForm.city.$touched && userForm.state.$error.required">Estado é obrigatório</small>      
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info"> 
+        <div class="panel-heading">
+            <h3 class="panel-title">Sistema</h3>
+        </div>
+        <div class="panel-body">
+            
+            <fieldset class="form-group col-md-6">
+                <label for="username">Usuário:</label>
+                <input type="text" class="form-control" name="username" id="username" required ng-model="user.username" ng-minlength="3" ng-maxlength="20" ng-pattern="/^[A-zA-Z0-9]+$/"/>
+                <small ng-show="!userForm.username.$error.pattern && userForm.username.$error.minlength">Usuário deve ter mais de 3 letras</small>
+                <small ng-show="!userForm.username.$error.pattern && userForm.username.$error.maxlength">Usuário deve ter menos de 20 letras</small>
+                <small ng-show="userForm.username.$error.pattern && userForm.username.$touched">Utilize apenas letras sem acento e números</small>
+            </fieldset>
+
+            <div class="form-group col-md-6">
+                <label for="password">Senha:</label>
+                <input class="form-control" type="password" name="password" required ng-model="user.password" ng-minlength="5"/>
+                <small ng-show="userForm.password.$error.required && userForm.password.$touched">Senha é obrigatória</small>
+                <small ng-show="userForm.password.$error.minlength && userForm.password.$touched">Sua senha precisa ter mais de 5 caracteres</small>
+            </div>
+            
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-body">        
+            <input class="btn btn-primary" type="submit" value="Criar" ng-disabled="userForm.$invalid" />
+            <a href="#" class="btn btn-default" ui-sref="login">Voltar</a>        
+        </div>
+        <div ng-show="showSuccess" class="alert alert-success fade in">        
+            {{messageSuccess}}  <a ui-sref="login" class="alert-link">Ir para a tela de Login</a>
+        </div>
+        <div ng-show="showError" class="alert alert-success fade in">        
+            {{messageError}}
+        </div>      
+    </div>
+    {{user}}
+    
+</div>
+</form>

@@ -1,0 +1,24 @@
+<form class="form" name="login" ng-submit="authenticate(user)" novalidate/>
+<div class="panel panel-default col-md-8">
+    <div class="panel-body form-inline">
+        <div class="form-group">
+            <label for="username">Usuário:</label>
+            <input class="form-control" id="username" required ng-model="user.username" ng-click="showError = false"/>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input class="form-control" type="password" id="password" required ng-model="user.password" ng-click="showError = false"/>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div>
+            <input class="btn btn-primary" type="submit" value="Entrar" />
+            <a href="#" class="btn btn-default" ui-sref="createUser">Cadastre-se</a>
+        </div>
+    </div>
+    <div ng-show="showError" class="alert alert-danger fade in">        
+        {{message}}
+    </div>
+</div>
+</form>
